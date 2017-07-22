@@ -36,16 +36,28 @@ class IBusSetupColorButton(Gtk.ColorButton):
     def __init__(self):
         Gtk.ColorButton.__init__(self)
         self.connect("notify::rgba", self.on_color_change)
+        # self.connect("notify::rgba_string", self.update_color)
 
     # @GObject.Property(type=str)
     # def rgba_string(self):
     #     return self.get_rgba().to_string()
 
-    # @rgba_string.setter
-    # def rgba_string(self, value):
-    #     new_value = Gdk.RGBA()
-    #     new_value.parse(value)
-    #     self.set_rgba(new_value)
+    def do_set_property(self, prop, value):
+        if prop.name == "rgba_string":
+            print("setting new default: " + self.rgba_string)
+            value = Gdk.RGBA()
+            value.parse(self.rgba_string)
+            self.set_rgba(value)
+        else:
+            Gtk.ColorButton.do_set_property(self, prop, value)
 
     def on_color_change(self, gparamstring, spec):
-        self.rgba_string = self.get_rgba().to_string()
+        value = self.get_rgba().to_string()
+        # Only set the property if it's different than the current, to avoid an infinite notify loop
+        if value != self.rgba_string:
+            self.rgba_string = value
+
+    def update_color(self, gparamstring, spec):
+        value = Gdk.RGBA()
+        value.parse(self.rgba_string)
+        self.set_rgba(value)
