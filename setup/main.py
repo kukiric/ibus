@@ -210,14 +210,12 @@ class Setup(object):
                 "colorbutton_custom_icon_color")
         self.__settings_panel.bind('xkb-icon-rgba',
                                    self.__colorbutton_custom_icon_color,
-                                   'rgb_string',
+                                   'rgba-string',
                                    Gio.SettingsBindFlags.DEFAULT)
         self.__settings_panel.bind('use-custom-icon-color',
                                     self.__colorbutton_custom_icon_color,
                                    'sensitive',
                                    Gio.SettingsBindFlags.GET)
-
-        print(self.__custom_icon_color);
 
         # show ime name
         self.__checkbutton_show_im_name = self.__builder.get_object(

@@ -24,8 +24,28 @@ from gi import require_version as gi_require_version
 gi_require_version('Gdk', '3.0')
 gi_require_version('Gtk', '3.0')
 
+from gi.repository import GObject
 from gi.repository import Gdk
 from gi.repository import Gtk
 
 class IBusSetupColorButton(Gtk.ColorButton):
     __gtype_name__ = "IBusSetupColorButton"
+
+    rgba_string = GObject.Property(type=str)
+
+    def __init__(self):
+        Gtk.ColorButton.__init__(self)
+        self.connect("notify::rgba", self.on_color_change)
+
+    # @GObject.Property(type=str)
+    # def rgba_string(self):
+    #     return self.get_rgba().to_string()
+
+    # @rgba_string.setter
+    # def rgba_string(self, value):
+    #     new_value = Gdk.RGBA()
+    #     new_value.parse(value)
+    #     self.set_rgba(new_value)
+
+    def on_color_change(self, gparamstring, spec):
+        self.rgba_string = self.get_rgba().to_string()
