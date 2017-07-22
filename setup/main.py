@@ -196,6 +196,14 @@ class Setup(object):
                                    'active',
                                    Gio.SettingsBindFlags.DEFAULT)
 
+        # use custom icon color in systray
+        self.__checkbutton_custom_icon_color = self.__builder.get_object(
+                "checkbutton_custom_icon_color")
+        self.__settings_panel.bind('use-custom-icon-color',
+                                   self.__checkbutton_custom_icon_color,
+                                   'active',
+                                   Gio.SettingsBindFlags.DEFAULT)
+
         # show ime name
         self.__checkbutton_show_im_name = self.__builder.get_object(
                 "checkbutton_show_im_name")
