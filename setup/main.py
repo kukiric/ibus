@@ -111,7 +111,6 @@ class Setup(object):
 
         gtk_builder_file = path.join(path.dirname(__file__), "./setup.ui")
         self.__builder = Gtk.Builder()
-        self.__builder.expose_object()
         self.__builder.set_translation_domain(DOMAINNAME)
         self.__builder.add_from_file(gtk_builder_file)
         self.__init_ui()
