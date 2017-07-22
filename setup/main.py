@@ -32,7 +32,6 @@ import time
 
 from gi import require_version as gi_require_version
 gi_require_version('GLib', '2.0')
-gi_require_version('Gdk', '3.0')
 gi_require_version('GdkX11', '3.0')
 gi_require_version('Gio', '2.0')
 gi_require_version('Gtk', '3.0')
@@ -43,7 +42,6 @@ from gi.repository import GLib
 # messages when import modules are failed.
 GLib.set_prgname('ibus-setup')
 
-from gi.repository import Gdk
 from gi.repository import GdkX11
 from gi.repository import Gio
 from gi.repository import Gtk
@@ -59,6 +57,7 @@ from enginedialog import EngineDialog
 from enginetreeview import EngineTreeView
 from engineabout import EngineAbout
 from i18n import DOMAINNAME, _, N_
+from colorbutton import IBusSetupColorButton
 
 (
     COLUMN_NAME,
@@ -80,16 +79,6 @@ from i18n import DOMAINNAME, _, N_
     DATA_STARTED,
     DATA_PRELOAD
 ) = list(range(9))
-
-# converts python str to Gdk.RGBA
-def string_to_rgba(self, s):
-    rgba = Gdk.RGBA()
-    rgba.parse(s)
-    return rgba
-
-# converts Gdk.RGBA to python str
-def rgba_to_string(self, rgba):
-    return rgba.to_string()
 
 class Setup(object):
     def __flush_gtk_events(self):
@@ -122,8 +111,9 @@ class Setup(object):
 
         gtk_builder_file = path.join(path.dirname(__file__), "./setup.ui")
         self.__builder = Gtk.Builder()
+        self.__builder.expose_object()
         self.__builder.set_translation_domain(DOMAINNAME)
-        self.__builder.add_from_file(gtk_builder_file);
+        self.__builder.add_from_file(gtk_builder_file)
         self.__init_ui()
 
     def __init_hotkeys(self):
@@ -219,18 +209,16 @@ class Setup(object):
         # icon color select button
         self.__colorbutton_custom_icon_color = self.__builder.get_object(
                 "colorbutton_custom_icon_color")
-        self.__settings_panel.bind_with_mapping('xkb-icon-rgba',
+        self.__settings_panel.bind('xkb-icon-rgba',
                                    self.__colorbutton_custom_icon_color,
-                                   'rgba',
-                                   Gio.SettingsBindFlags.DEFAULT,
-                                   string_to_rgba,
-                                   rgba_to_string,
-                                   None,
-                                   None)
+                                   'rgb_string',
+                                   Gio.SettingsBindFlags.DEFAULT)
         self.__settings_panel.bind('use-custom-icon-color',
                                     self.__colorbutton_custom_icon_color,
                                    'sensitive',
                                    Gio.SettingsBindFlags.GET)
+
+        print(self.__custom_icon_color);
 
         # show ime name
         self.__checkbutton_show_im_name = self.__builder.get_object(
