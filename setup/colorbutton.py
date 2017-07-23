@@ -58,7 +58,6 @@ class IBusSetupColorButton(Gtk.ColorButton):
 
     @rgba_string.setter
     def rgba_string(self, value):
-        print("setting new default: " + value + " from " + self.rgba_string_internal)
         # Avoid looping back from the notify event by checking if the value is the same from the last call
         if value != self.rgba_string_internal:
             self.rgba_string_internal = value
