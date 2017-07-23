@@ -205,9 +205,10 @@ class Setup(object):
                                    'active',
                                    Gio.SettingsBindFlags.DEFAULT)
 
-        # icon color select button
+        # icon color button
         self.__colorbutton_custom_icon_color = self.__builder.get_object(
                 "colorbutton_custom_icon_color")
+        self.__colorbutton_custom_icon_color.set_custom_checkbutton(self.__checkbutton_custom_icon_color)
         self.__settings_panel.bind('xkb-icon-rgba',
                                    self.__colorbutton_custom_icon_color,
                                    'rgba-string',
